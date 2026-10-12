@@ -1,6 +1,0 @@
-#让我喵喵
-
-hostname = www.pdreamer.com
-
-
-^https:\/\/www\.pdreamer\.com\/aymyProd\/api\/getUserInfo$ url jsonjq-response-body .data="/vQvgNkIoO2ATYawO3maPiAiUnIbH/n4NPH+1GSpn7JPffuMA7s8LJMFVfiGuL5xU0TO9ZcUSxsmGRvXH5pHvHTfnyu4UldsgrSwQYajPp0/87mcEM4UbLrnADtmqxvInfjOLB6FC3zvQGo1Hk3DqjtgrydVA12zAYxpUEr/pzkDA32v8gcWkIVRjbaIh9jbfek4/KQWeXwdhfBN9dkjIg+i6zOxEBScW++wX2cMNrSrdHEyzSmEi9o18L6SbO+TuAAIpEzejiHG6w7lmzf7xV5G0adI832r59ZL1itrly9qxVfVFT+qFPC008kavaHAzpTsNlDMU7f+PvHBTHhs1JY7Rg32V3YDbvzCMCHLB49Fi5OOQKA+RsnkU/4+HGf/z1jwNHxxg2UUF/6mFWrgkPqonHMSwVigV+Fp0hwafJ32fOaisCYZeia4EOyi95qjO1mW6/VQ4CyaSYXVMpty6eBCfgWOzVpG35+iC/Fs85nqULqA5VgwVwSNY/ZjAydl/HqY2f0UKCqpxvuJsv8v/U+jxqoDSUzLbkBtdToHlLEaQhkEYT1uEIgacC8PbfkKoyYiJxjWD3Lu1gWgbWcX0qs99JHC/RtWObekcFtsx1omsGzLTe5SXT5s/y4AQXulH3CjPY1pWNw6EYvMuhZh2w=="

@@ -1,5 +1,5 @@
 /*
- * 酷狗音乐 · 去广告 / 精简底栏（Quantumult X 响应脚本）
+ * 酷狗音乐 · 1去广告 / 精简底栏（Quantumult X 响应脚本）
  * 依据抓包：quantumult-x-2026-10-27-184808.har（酷狗 iOS 20.8.7）
  *
  * 处理内容：
@@ -69,7 +69,27 @@
     return false;
   }
 
-  // 处理 tab 列表结构：底栏只留首页/我的，并同步 normal_ids / bottom_ad
+  // 视频 / K歌：这两个是客户端一级入口，删掉后容易被本地缓存/默认值“复活”，
+  // 所以保留条目但强制标成隐藏（status=3，抓包里直播 tab 的隐藏值就是 3）。
+  function isVideoOrKsong(t) {
+    if (!t || typeof t !== "object") return false;
+    const name = String(t.name || t.tab_name || t.title || "").trim();
+    const slug = String(t.slug || t.key || "").trim();
+    if (/^(video|ksongnew|ksong|video_feed|sing)$/i.test(slug)) return true;
+    return /视频|K歌/.test(name);
+  }
+
+  function hideTab(t) {
+    t.status = 3;
+    if ("status_20" in t) t.status_20 = 3;
+    t.is_main = 0;
+    t.appoint_pos = 100;
+    t.sort = 9999;
+    t.is_draggable = 0;
+    return t;
+  }
+
+  // 处理 tab 列表结构：底栏只留首页/我的，并同步 normal_ids / action_log / bottom_ad
   function pruneTabBody(text) {
     let o;
     try { o = JSON.parse(text); } catch (e) { return text; }
@@ -77,28 +97,33 @@
     let removed = false;
 
     ["list", "tab_list", "tabs", "bottom_tab_list"].forEach(function (key) {
-      if (Array.isArray(d[key])) {
-        const before = d[key].length;
-        d[key] = d[key].filter(function (t) {
-          return KEEP_ONLY_HOME ? isKeepTab(t) : !isBlockedTab(t);
-        });
-        if (d[key].length !== before) removed = true;
+      if (!Array.isArray(d[key])) return;
+      const before = d[key].length;
+      if (KEEP_ONLY_HOME) {
+        // 只留首页/我的；视频/K歌 保留但标隐藏；其余全删
+        d[key] = d[key]
+          .filter(function (t) { return isKeepTab(t) || isVideoOrKsong(t); })
+          .map(function (t) { return isKeepTab(t) ? t : hideTab(t); });
+      } else {
+        d[key] = d[key].filter(function (t) { return !isBlockedTab(t); });
       }
+      if (d[key].length !== before) removed = true;
     });
 
     // 底栏气泡广告（tab_bottom_list.bottom_ad：会员专区、赚钱等），整块清掉
     if (Array.isArray(d.bottom_ad)) { d.bottom_ad = []; removed = true; }
     if (Array.isArray(d.live_data)) d.live_data = [];
 
-    // tab_list_v3：normal_ids 是底栏展示用 id 串，必须同步，否则被删的 tab 可能仍出现
+    // tab_list_v3：normal_ids / action_log 是客户端真正用于渲染底栏的两处数据
     if (removed && Array.isArray(d.list)) {
-      if ("normal_ids" in d) {
-        const ids = d.list
-          .map(function (t) { return t && t.tab_name_uni_id; })
-          .filter(function (x) { return x !== undefined && x !== null && x !== ""; });
-        d.normal_ids = ids.join(",");
-      }
+      const ids = d.list.filter(isKeepTab)
+        .map(function (t) { return t && t.tab_name_uni_id; })
+        .filter(function (x) { return x !== undefined && x !== null && x !== ""; });
+      const idStr = ids.join(",");
+      if ("normal_ids" in d) d.normal_ids = idStr;
+      if ("action_log" in d) d.action_log = "自定义#" + idStr;
       if ("auto_enter" in d) d.auto_enter = 0;
+      if ("first_position" in d) d.first_position = 1;
     }
     return JSON.stringify(o);
   }

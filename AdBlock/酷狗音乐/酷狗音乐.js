@@ -4,12 +4,21 @@
  *
  * 处理内容：
  *   1. 开屏广告      gateway.kugou.com/ads.gateway/v4/mobile_splash & /v4/mobile_splash_sort
- *   2. 底栏“视频”分类 gateway.kugou.com/card/v1/pxy/listen (module: tab_list_v3)
- *      底栏“会员/VIP”广告位      pxy/v1/combo/startup (module: tab_bottom_list -> bottom_ad)
+ *   2. 底栏 tab 列表 gateway.kugou.com/card/v1/pxy/listen (module: tab_list_v3)
+ *      底栏气泡广告位 pxy/v1/combo/startup (module: tab_bottom_list -> bottom_ad)
  *   3. 广告/折扣推销  adservice|ads.service/v3/vip_center、ads.gateway/v2|v3/*、
  *                    adp/ad/v1/home_combine、deal/adp…、aterouter/v2/get_dialog（弹窗）
+ *
+ * 底栏策略：KEEP_ONLY_HOME = true 时底栏只留「首页」（「我的」是客户端内置 tab），
+ *           其余（视频/直播/乐库/听书/短剧/会员…）全部从 tab 列表里删掉。
  */
 (function () {
+  /* ============ 可调开关 ============ */
+  // true  = 底栏只留「首页」+「我的」（推荐做法，向下兼容“我的”内置不在接口里）
+  // false = 只删“视频 / VIP / 会员”分类，其余 tab 保留
+  const KEEP_ONLY_HOME = true;
+  /* ================================= */
+
   const url = ($request && $request.url) || "";
   const raw = ($response && $response.body) || "";
   if (!raw) { $done({}); return; }
@@ -38,6 +47,17 @@
     return node;
   }
 
+  // 只保留「首页/推荐/我的」
+  function isKeepTab(t) {
+    if (!t || typeof t !== "object") return false;
+    const name = String(t.name || t.tab_name || t.title || "").trim();
+    const slug = String(t.slug || t.key || "").trim();
+    if (/^(recommend|home|index|main|mine|my)$/i.test(slug)) return true;
+    if (/^(首页|推荐|我的)$/.test(name)) return true;
+    if (Number(t.is_main) === 1) return true;
+    return false;
+  }
+
   // 需要从底栏 / 分类栏里剔除的 tab（视频、VIP/会员）
   function isBlockedTab(t) {
     if (!t || typeof t !== "object") return false;
@@ -49,7 +69,7 @@
     return false;
   }
 
-  // 处理 tab 列表结构：删“视频/VIP”tab，并同步 normal_ids / bottom_ad
+  // 处理 tab 列表结构：底栏只留首页/我的，并同步 normal_ids / bottom_ad
   function pruneTabBody(text) {
     let o;
     try { o = JSON.parse(text); } catch (e) { return text; }
@@ -59,7 +79,9 @@
     ["list", "tab_list", "tabs", "bottom_tab_list"].forEach(function (key) {
       if (Array.isArray(d[key])) {
         const before = d[key].length;
-        d[key] = d[key].filter(function (t) { return !isBlockedTab(t); });
+        d[key] = d[key].filter(function (t) {
+          return KEEP_ONLY_HOME ? isKeepTab(t) : !isBlockedTab(t);
+        });
         if (d[key].length !== before) removed = true;
       }
     });
@@ -69,11 +91,14 @@
     if (Array.isArray(d.live_data)) d.live_data = [];
 
     // tab_list_v3：normal_ids 是底栏展示用 id 串，必须同步，否则被删的 tab 可能仍出现
-    if (removed && Array.isArray(d.list) && "normal_ids" in d) {
-      const ids = d.list
-        .map(function (t) { return t && t.tab_name_uni_id; })
-        .filter(function (x) { return x !== undefined && x !== null && x !== ""; });
-      if (ids.length) d.normal_ids = ids.join(",");
+    if (removed && Array.isArray(d.list)) {
+      if ("normal_ids" in d) {
+        const ids = d.list
+          .map(function (t) { return t && t.tab_name_uni_id; })
+          .filter(function (x) { return x !== undefined && x !== null && x !== ""; });
+        d.normal_ids = ids.join(",");
+      }
+      if ("auto_enter" in d) d.auto_enter = 0;
     }
     return JSON.stringify(o);
   }

@@ -1,0 +1,35 @@
+{
+  "id": "netease_music_u",
+  "name": "网易云 MUSIC_U 抓取",
+  "author": "you",
+  "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/2d/e8/1b/2de81bfd-29a0-d067-63c3-38315cc1661a/AppIcon-1x_U007emarketing-0-9-0-0-85-220-0.png/460x0w.webp",
+  "repo": "",
+  "desc": "自动抓取网易云客户端登录态 Cookie 中的 MUSIC_U，写入 BoxJS 便于直接复制使用",
+  "apps": [
+    {
+      "id": "netease_music_u",
+      "name": "网易云 MUSIC_U",
+      "author": "you",
+      "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/2d/e8/1b/2de81bfd-29a0-d067-63c3-38315cc1661a/AppIcon-1x_U007emarketing-0-9-0-0-85-220-0.png/460x0w.webp",
+      "repo": "",
+      "desc": "打开网易云 App 播放/进入会员页触发抓取；抓取后此处可直接长按复制 MUSIC_U",
+      "keys": ["wyy_music_u", "wyy_music_u_time"],
+      "settings": [
+        {
+          "id": "wyy_music_u",
+          "name": "MUSIC_U（长按全选即可复制）",
+          "val": "",
+          "type": "textarea",
+          "desc": "由重写脚本自动写入，一般无需手动填写"
+        },
+        {
+          "id": "wyy_music_u_time",
+          "name": "最后更新",
+          "val": "",
+          "type": "string",
+          "desc": "最近一次抓取时间"
+        }
+      ]
+    }
+  ]
+}

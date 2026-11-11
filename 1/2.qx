@@ -36,21 +36,21 @@ DOMAIN,ipv6.music.163.com,REJECT
 ^https?:\/\/interface\d?\.music\.163.com\/w?e?api\/search\/default data-type=text data="" header="Content-Type:text/plain"
 
 [Script]
-皮肤 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/playermode\/, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
+皮肤 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/xe?w?e?api\/playermode\/, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
 
-歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/search\/(?:complex\/page|complex\/rec\/song\/get|song\/list\/page), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
+歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/xe?w?e?api\/search\/(?:complex\/page|complex\/rec\/song\/get|song\/list\/page), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
 
-歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/v3\/song\/detail, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
+歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/xe?w?e?api\/v3\/song\/detail, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
 
-歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/song\/(?:chorus|enhance\/|play\/|type\/detail\/get), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
+歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/xe?w?e?api\/song\/(?:chorus|enhance\/|play\/|type\/detail\/get), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
 
-歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/(?:v1\/artist\/top\/song|v3\/discovery\/recommend\/songs), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
+歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/xe?w?e?api\/(?:v1\/artist\/top\/song|v3\/discovery\/recommend\/songs), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
 
-等级 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/vipnewcenter\/app\/resource\/newaccountpage, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
+等级 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/xe?w?e?api\/vipnewcenter\/app\/resource\/newaccountpage, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
 
-首页歌单 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/w?e?api\/(homepage\/|v6\/)?playlist\/(?!(?:delete|subscribe|unsubscribe)), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
+首页歌单 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/xe?w?e?api\/(homepage\/|v6\/)?playlist\/(?!(?:delete|subscribe|unsubscribe)), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
 
-音质 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/vipauth\/app\/auth\/(soundquality\/)?query, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
+音质 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/xe?w?e?api\/vipauth\/app\/auth\/(soundquality\/)?query, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/1/1.qx, timeout=60
 
 [MITM]
 hostname = %APPEND% interface*.music.163.com

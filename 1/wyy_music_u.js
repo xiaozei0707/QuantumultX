@@ -1,13 +1,19 @@
 /***************************************
- * 网易云音乐 MUSIC_U 抓取 → 写入 BoxJS
+ * 网易云音乐 MUSIC_U / Cookie 抓取 → 写入 BoxJS
  * 平台：Quantumult X（script-request-header）
  * 触发：^https?:\/\/interface\d?\.music\.163\.com\/x?w?e?api\/vipauth\/app\/auth\/(soundquality\/)?query
  *       （\/x?w?e?api\/ 覆盖 api / eapi / wapi / weapi / xapi / xeapi / xweapi）
- * 说明：只抓取、只保存，不修改任何请求/响应，不影响播放与账号安全
+ * 说明：抓「整条 Cookie」+「其中的 MUSIC_U」，只读不改包，不影响播放与账号
+ *
+ * 写入 BoxJS 的三个键：
+ *   wyy_music_cookie  整条 Cookie 原文（MUSIC_U=...; caid=...; NMDI=... 全字段）
+ *   wyy_music_u       仅 MUSIC_U 的值
+ *   wyy_music_u_time  抓取时间
  ***************************************/
 
-const KEY_MUSIC_U = 'wyy_music_u';        // BoxJS 里的 MUSIC_U
-const KEY_UPDATED = 'wyy_music_u_time';   // 最后更新时间
+const KEY_COOKIE = 'wyy_music_cookie';   // 整条 cookie
+const KEY_MUSIC_U = 'wyy_music_u';       // 只要 MUSIC_U
+const KEY_UPDATED = 'wyy_music_u_time';  // 抓取时间
 const BOXJS_URL = 'http://boxjs.com';
 
 !(function () {
@@ -15,33 +21,50 @@ const BOXJS_URL = 'http://boxjs.com';
     const req = typeof $request !== 'undefined' ? $request : {};
     const headers = req.headers || {};
 
-    const musicU = pickMusicU(headers);
-
-    if (!musicU) {
+    // 1) 找到含 MUSIC_U= 的那段文本（优先 Cookie 头，兜底扫全 headers / body）
+    const rawCookie = findCookieText(headers, req);
+    if (!rawCookie) {
       console.log('[MUSIC_U] 本次请求未找到 MUSIC_U，跳过');
       return finish();
     }
 
-    const old = readBox(KEY_MUSIC_U);
+    // 2) 整条 cookie：压掉分隔符周围的多余空白，保持原字段顺序
+    const cookie = tidyCookie(rawCookie);
+
+    // 3) 从整条 cookie 里取 MUSIC_U（多个匹配时取最长的那个，避免抓到残段）
+    const musicU = extractMusicU(cookie);
+    if (!musicU) {
+      console.log('[MUSIC_U] 找到 cookie 但解析不出 MUSIC_U，跳过');
+      return finish();
+    }
+
+    const oldMusicU = readBox(KEY_MUSIC_U);
+    const oldCookie = readBox(KEY_COOKIE);
     const now = timeStr();
 
+    writeBox(KEY_COOKIE, cookie);
     writeBox(KEY_MUSIC_U, musicU);
     writeBox(KEY_UPDATED, now);
 
-    // 日志：抓取成功 + 抓到的 cookie
-    console.log('[MUSIC_U] ✅ 抓取成功');
-    console.log('[MUSIC_U] cookie: MUSIC_U=' + musicU);
-    console.log('[MUSIC_U] 长度 ' + musicU.length + ' 位 · ' + now);
+    // ===== 日志：抓取成功 + 抓到的内容 =====
+    console.log('[MUSIC_U] ✅ 抓取成功 (' + now + ')');
+    console.log('[MUSIC_U] 整条 cookie 长度: ' + cookie.length + ' 位，字段数: ' + countFields(cookie));
+    console.log('[MUSIC_U] MUSIC_U 长度: ' + musicU.length + ' 位');
+    console.log('[MUSIC_U] cookie 原文: ' + cookie);
 
-    if (old === musicU) {
-      console.log('[MUSIC_U] 与 BoxJS 中已存值一致，仅刷新时间');
+    const changed = oldMusicU !== musicU || oldCookie !== cookie;
+    if (!changed) {
+      console.log('[MUSIC_U] 与 BoxJS 中已存内容一致，仅刷新时间');
     } else {
-      console.log('[MUSIC_U] BoxJS 已更新（旧值 ' + (old ? old.length + ' 位' : '无') + ' → 新值 ' + musicU.length + ' 位）');
+      console.log(
+        '[MUSIC_U] BoxJS 已更新（MUSIC_U ' + (oldMusicU ? oldMusicU.length : 0) + ' → ' + musicU.length +
+        ' 位；cookie ' + (oldCookie ? oldCookie.length : 0) + ' → ' + cookie.length + ' 位）'
+      );
       notify(
-        '✅ 网易云 MUSIC_U 抓取成功',
-        '长度 ' + musicU.length + ' 位 · ' + now + ' · 已写入 BoxJS',
-        'cookie: MUSIC_U=' + musicU,
-        'MUSIC_U=' + musicU
+        '✅ 网易云 Cookie 抓取成功',
+        'cookie ' + cookie.length + ' 位 · MUSIC_U ' + musicU.length + ' 位 · ' + now,
+        'MUSIC_U=' + musicU,
+        cookie
       );
     }
   } catch (e) {
@@ -56,18 +79,93 @@ const BOXJS_URL = 'http://boxjs.com';
     if (typeof $done === 'function') $done({});
   }
 
-  // 取出 MUSIC_U：优先 Cookie 头，兜底扫描全部请求头
-  function pickMusicU(h) {
-    const cookie = getHeader(h, 'cookie');
-    let v = matchMusicU(cookie);
-    if (v) return v;
+  // 找出含 MUSIC_U= 的 cookie 文本：Cookie 头 > 其他头 > 请求体
+  function findCookieText(h, req) {
+    const fromCookieHeader = matchCookie(getHeader(h, 'cookie'));
+    if (fromCookieHeader) return fromCookieHeader;
 
+    // 有些版本把 cookie 塞进自定义头
+    let best = '';
     for (const k in h) {
       if (!k || k.toLowerCase() === 'cookie') continue;
-      v = matchMusicU(h[k]);
-      if (v) return v;
+      const t = matchCookie(String(h[k] == null ? '' : h[k]));
+      if (t && t.length > best.length) best = t;
+    }
+    if (best) return best;
+
+    // 兜底：请求体（eapi 的 header 字段里也可能带 cookie）
+    const body = req.body;
+    if (body) {
+      const t = matchCookie(typeof body === 'string' ? body : safeString(body));
+      if (t) return t;
     }
     return '';
+  }
+
+  // 从一段文本里切出「含 MUSIC_U= 的整条 cookie」
+  function matchCookie(raw) {
+    if (!raw) return '';
+    let text = String(raw);
+
+    // 原始形态最常见
+    let hit = sliceFromMusicU(text);
+    if (hit) return hit;
+
+    // 整段被 urlencode 的情况
+    const decoded = decodeOnce(text);
+    if (decoded !== text) {
+      hit = sliceFromMusicU(decoded);
+      if (hit) return hit;
+    }
+    return '';
+  }
+
+  // 取从第一个 MUSIC_U= 起、到该字段结束（含后续所有 ; 字段）的整串
+  function sliceFromMusicU(text) {
+    const i = text.search(/MUSIC_U\s*=/i);
+    if (i < 0) return '';
+    let s = text.slice(i);
+    // 去掉 JSON / 转义外壳（不动 cookie 自身的 caid={...}）
+    s = s.replace(/\\u003b/gi, ';').replace(/\\"/g, '"').replace(/\\n|\\r|\r?\n/g, '');
+    s = s.replace(/^[^=]*=\s*/, 'MUSIC_U=');
+    // 只在“末尾”剪掉 JSON 包裹符，绝不能从此处的 caid={" 处开剪
+    s = s.replace(/["'\\]+[\s}\]]*$/, '');
+    s = s.trim().replace(/[;,]+$/, '');
+    return /MUSIC_U=./i.test(s) ? s : '';
+  }
+
+  function extractMusicU(cookie) {
+    if (!cookie) return '';
+    const re = /MUSIC_U\s*=\s*([^;]+)/gi;
+    let m, best = '';
+    while ((m = re.exec(cookie))) {
+      const v = m[1].trim().replace(/^["']|["']$/g, '');
+      if (v.length > best.length) best = v;
+    }
+    if (best.length < 16) return '';
+    if (!/^[0-9A-Za-z+/=_.%-]+$/.test(best)) return '';
+    return best;
+  }
+
+  // 压掉 `;` 前后多余空白，输出形如 `MUSIC_U=...; caid=...; NMDI=...`
+  function tidyCookie(s) {
+    return String(s)
+      .trim()
+      .replace(/\s*;\s*/g, '; ')
+      .replace(/;\s*$/, '');
+  }
+
+  function countFields(cookie) {
+    return String(cookie).split(';').filter((x) => x.trim()).length;
+  }
+
+  function decodeOnce(t) {
+    if (!/%3D|%3B|%25/i.test(t)) return t;
+    try { return decodeURIComponent(t); } catch (e) { return t; }
+  }
+
+  function safeString(v) {
+    try { return typeof v === 'object' ? JSON.stringify(v) : String(v); } catch (e) { return ''; }
   }
 
   // 大小写不敏感地读请求头
@@ -77,25 +175,6 @@ const BOXJS_URL = 'http://boxjs.com';
       if (k && k.toLowerCase() === target) return String(h[k] == null ? '' : h[k]);
     }
     return '';
-  }
-
-  // 从一段文本里匹配 MUSIC_U=xxxx（兼容 %3D 编码与带引号）
-  function matchMusicU(raw) {
-    if (!raw) return '';
-
-    let text = String(raw);
-    // 部分版本会把整段 cookie 做 urlencode
-    if (/%3D|%3B/i.test(text)) {
-      try { text = decodeURIComponent(text); } catch (e) {}
-    }
-
-    const m = /(?:^|[;\s&,"])MUSIC_U=([^;,\s"'&]+)/i.exec(text);
-    if (!m) return '';
-
-    let val = m[1].trim().replace(/^["']|["']$/g, '');
-    if (val.length < 16) return '';
-    if (!/^[0-9A-Za-z+/=_.%-]+$/.test(val)) return '';
-    return val;
   }
 
   // ===== BoxJS / QX 持久化（BoxJS 与客户端共用同一份键值存储） =====

@@ -1,14 +1,10 @@
-   [MITM]
-   hostname = client.app.coc.10086.cn, clientaccess.10086.cn, h5.bj.10086.cn
+[MITM]
+hostname = client.app.coc.10086.cn, clientaccess.10086.cn, h5.bj.10086.cn
 
-   [rewrite_local]
-   ^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/[LD]N\/uam(onekey|randcode)login\/autoLogin url
- script-request-body https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js
-   ^https:\/\/clientaccess\.10086\.cn\/biz-orange\/BN\/scoreQueryService\/getScoreQuery url script-request-body
- https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js
-   ^https:\/\/h5\.bj\.10086\.cn\/ActSignIn2023\/(getSignIn|doPrize) url script-request-header
- https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js
+[rewrite_local]
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/[LD]N\/uam(onekey|randcode)login\/autoLogin url script-request-body https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js
+^https:\/\/clientaccess\.10086\.cn\/biz-orange\/BN\/scoreQueryService\/getScoreQuery url script-request-body https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js
+^https:\/\/h5\.bj\.10086\.cn\/ActSignIn2023\/(getSignIn|doPrize) url script-request-header https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js
 
-   [task_local]
-   20 8 * * * https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js, tag=中国移
- 动签到, img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png, enabled=true
+[task_local]
+20 8 * * * https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js, tag=中国移动签到, img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png, enabled=true

@@ -22,29 +22,29 @@
  * [MITM]
  * hostname = client.app.coc.10086.cn, clientaccess.10086.cn, h5.bj.10086.cn
  * [Script]
- * request if ${url} ~= /^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/[LD]N\/uam(onekey|randcode)login\/autoLogin/i then script("https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js") with tag="中国移动 Cookie", img_url="https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png", requires_body=true
- * request if ${url} ~= /^https:\/\/clientaccess\.10086\.cn\/biz-orange\/BN\/scoreQueryService\/getScoreQuery/i then script("https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js") with tag="中国移动 Cookie", img_url="https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png", requires_body=true
- * request if ${url} ~= /^https:\/\/h5\.bj\.10086\.cn\/ActSignIn2023\/(getSignIn|doPrize)/i then script("https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js") with tag="中国移动 Cookie", img_url="https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png"
- * cron "20 8 * * *" then script("https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js") with tag="中国移动签到", img_url="https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png"
+ * request if ${url} ~= /^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/[LD]N\/uam(onekey|randcode)login\/autoLogin/i then script("https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js") with tag="中国移动 Cookie", img_url="https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png", requires_body=true
+ * request if ${url} ~= /^https:\/\/clientaccess\.10086\.cn\/biz-orange\/BN\/scoreQueryService\/getScoreQuery/i then script("https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js") with tag="中国移动 Cookie", img_url="https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png", requires_body=true
+ * request if ${url} ~= /^https:\/\/h5\.bj\.10086\.cn\/ActSignIn2023\/(getSignIn|doPrize)/i then script("https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js") with tag="中国移动 Cookie", img_url="https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png"
+ * cron "20 8 * * *" then script("https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js") with tag="中国移动签到", img_url="https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png"
  *
  * ===== Surge =====
  * [MITM]
  * hostname = %APPEND% client.app.coc.10086.cn, clientaccess.10086.cn, h5.bj.10086.cn
  * [Script]
- * 中国移动 Cookie = type=http-request,pattern=^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/[LD]N\/uam(onekey|randcode)login\/autoLogin,requires-body=true,max-size=0,script-path=https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js,img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png
- * 中国移动 Cookie 2 = type=http-request,pattern=^https:\/\/clientaccess\.10086\.cn\/biz-orange\/BN\/scoreQueryService\/getScoreQuery,requires-body=true,max-size=0,script-path=https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js,img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png
- * 中国移动 Cookie 3 = type=http-request,pattern=^https:\/\/h5\.bj\.10086\.cn\/ActSignIn2023\/(getSignIn|doPrize),requires-body=false,max-size=0,script-path=https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js,img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png
- * 中国移动签到 = type=cron,cronexp=20 8 * * *,timeout=60,script-path=https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js,img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png
+ * 中国移动 Cookie = type=http-request,pattern=^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/[LD]N\/uam(onekey|randcode)login\/autoLogin,requires-body=true,max-size=0,script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js,img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png
+ * 中国移动 Cookie 2 = type=http-request,pattern=^https:\/\/clientaccess\.10086\.cn\/biz-orange\/BN\/scoreQueryService\/getScoreQuery,requires-body=true,max-size=0,script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js,img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png
+ * 中国移动 Cookie 3 = type=http-request,pattern=^https:\/\/h5\.bj\.10086\.cn\/ActSignIn2023\/(getSignIn|doPrize),requires-body=false,max-size=0,script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js,img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png
+ * 中国移动签到 = type=cron,cronexp=20 8 * * *,timeout=60,script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js,img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png
  *
  * ===== Quantumult X =====
  * [MITM]
  * hostname = client.app.coc.10086.cn, clientaccess.10086.cn, h5.bj.10086.cn
  * [rewrite_local]
- * ^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/[LD]N\/uam(onekey|randcode)login\/autoLogin url script-request-body https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js
- * ^https:\/\/clientaccess\.10086\.cn\/biz-orange\/BN\/scoreQueryService\/getScoreQuery url script-request-body https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js
- * ^https:\/\/h5\.bj\.10086\.cn\/ActSignIn2023\/(getSignIn|doPrize) url script-request-header https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js
+ * ^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/[LD]N\/uam(onekey|randcode)login\/autoLogin url script-request-body https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js
+ * ^https:\/\/clientaccess\.10086\.cn\/biz-orange\/BN\/scoreQueryService\/getScoreQuery url script-request-body https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js
+ * ^https:\/\/h5\.bj\.10086\.cn\/ActSignIn2023\/(getSignIn|doPrize) url script-request-header https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js
  * [task_local]
- * 20 8 * * * https://raw.githubusercontent.com/MaYIHEI/paperclip/refs/heads/main/app/cmcc/cmcc.js, tag=中国移动签到, img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png, enabled=true
+ * 20 8 * * * https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/JavaScript/cmcc.js, tag=中国移动签到, img-url=https://raw.githubusercontent.com/MaYIHEI/pin/refs/heads/main/app/cmcc.png, enabled=true
  *
  * ===== Stash =====
  * cron:
@@ -239,6 +239,9 @@ function capture() {
   $.done();
 }
 
+// 只认真实 11 位手机号;占位号(如 99999999999)一律不收
+const isRealTel = (t) => /^1[3-9]\d{9}$/.test(String(t || ""));
+
 // 抓登录包:APP 协议密钥逐组探测,哪组能解开就用哪组
 function capLogin(body) {
   const hit = decAny(body, null, true);
@@ -250,6 +253,7 @@ function capLogin(body) {
   const obj = hit.json;
   if (!obj.xk) throw new Error("登录信封缺 xk");
   const tel = obj.tel || "";
+  if (!isRealTel(tel)) { $.log(`[WARN] 登录包里的号码无效(${maskPhone(tel) || "空"}),不保存`); return; }
   const old = loadAccounts().find((a) => a.tel === tel);
   // 同账号凭证没变(小组件等续登请求也会命中),只刷新信封,不覆盖会话、不清签到记录、不弹通知
   if (old && old.J && (toJson(old.J) || {}).xk === obj.xk) {
@@ -268,6 +272,9 @@ function capScore(body, hdr) {
   const hit = decAny(body, KS_BIZ, true);
   if (!hit || !hit.json.tel) { $.log("[WARN] 积分包解不开,跳过"); return; }
   const env = hit.json, tel = env.tel;
+  // 占位号/副卡号保护:不是有效手机号、或缺 xk,都不入库,避免存成错误账号
+  if (!isRealTel(tel)) { $.log(`[WARN] 积分包里的号码无效(${maskPhone(tel) || "空"}),不保存`); return; }
+  if (!env.xk) { $.log("[WARN] 积分包缺 xk,不保存"); return; }
   const ck = cookieFromHeaders(hdr);
   const { count } = upsertAccount(tel, (a) => {
     a.tel = tel;
@@ -465,6 +472,23 @@ async function main() {
   const accounts = loadAccounts();
   if (!accounts.length) { saveStatus("none", "缺登录凭证"); $.msg("⚠️ 中国移动", "缺少登录凭证", "划掉后台的中国移动 APP 重新打开,触发抓取后再运行"); return; }
 
+  // 体检模式:BoxJS/argument 设 cmcc_dump=true ,只把抓到的凭证结构打到日志,方便排查"抓错了"
+  if (ARG.dump === "true" || $.getdata("cmcc_dump") === "true") {
+    const pool0 = h5Pool();
+    const brief = (v, n) => (v ? String(v).slice(0, n) + "…(" + String(v).length + "位)" : "空");
+    $.log("[DUMP] 账号数 " + accounts.length + " | H5 token 池 " + pool0.length + " | 密钥组 " + KEYSETS.map((k) => k.name).join(","));
+    accounts.forEach((a, i) => {
+      const env = toJson(a.J) || {};
+      const ag = a.ckAt ? Math.round((Date.now() - a.ckAt) / 60000) + " 分钟前" : "未知";
+      $.log(`[DUMP] #${i + 1} tel=${a.tel} 有效号码=${isRealTel(a.tel)} 密钥组=${a.ksName || "-"} 登录形态=${a.mode || "-"}`);
+      $.log(`[DUMP]   信封: cv=${env.cv || "-"} sv=${env.sv || "-"} imei=${brief(env.imei, 6)} cid=${brief(env.cid, 6)} ak=${brief(env.ak, 6)} xk=${brief(env.xk, 8)} t=${brief(env.t, 6)}`);
+      $.log(`[DUMP]   会话: ${a.ck ? "已存 " + String(a.ck).replace(/(JSESSIONID=[^;]{8})[^;]*/, "$1…") + " (" + ag + ")" : "未存"}`);
+      $.log(`[DUMP]   签到: token=${brief(a.h5 && a.h5.token, 6)} constid=${brief((a.h5 && a.h5.constid) || $.getdata(K_CONSTID), 6)}`);
+    });
+    $.msg("中国移动", "🔍 凭证体检", accounts.map((a) => `${maskPhone(a.tel)} · ${a.ksName || "-"} · 会话${a.ck ? "有" : "无"} · token${(a.h5 && a.h5.token) ? "有" : "无"}`).join("\n"));
+    return;
+  }
+
   const pool = h5Pool();
   const results = [];
   for (let i = 0; i < accounts.length; i++) {
@@ -481,7 +505,8 @@ async function main() {
       acc.ck = cookie; acc.ckAt = Date.now();
     } catch (e) {
       refreshErr = String(e.message || e);
-      $.log(`[WARN] ${tel ? maskPhone(tel) : "账号"} 续登失败,改用抓到的会话继续: ${refreshErr}`);
+      const ag = acc.ckAt ? Math.round((Date.now() - acc.ckAt) / 60000) + " 分钟前的会话" : "没有备用会话";
+      $.log(`[WARN] ${tel ? maskPhone(tel) : "账号"} 续登失败(${ag}),继续尝试查积分/签到: ${refreshErr}`);
     }
 
     // 2) 签到:优先 APP 路径(可自续令牌),不行再走 H5 token 直签

@@ -31,26 +31,26 @@ DOMAIN,ipv6.music.163.com,REJECT
 
 ^https:\/\/interface\d\.music\.163\.com\/eapi\/my\/podcast\/tab\/recommend data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
-^https?:\/\/interface\d?\.music\.163\.com\/e?api\/(ocpc\/)?ad\/ data-type=text data="" header="Content-Type:text/plain"
+^https?:\/\/interface\d?\.music\.163.com\/e?api\/(ocpc\/)?ad\/ data-type=text data="" header="Content-Type:text/plain"
 
 ^https?:\/\/interface\d?\.music\.163.com\/w?e?api\/search\/default data-type=text data="" header="Content-Type:text/plain"
 
 [Script]
-皮肤 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/playermode\/, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/wyy/wyy.js, timeout=60
+皮肤 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/x?eapi\/playermode\/, script-path=https://he2o.vercel.app/Resource/-Rewrite/anyehttp/wyy-s.js, timeout=60
 
-歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/search\/(?:complex\/page|complex\/rec\/song\/get|song\/list\/page), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/wyy/wyy.js, timeout=60
+歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/x?eapi\/search\/(?:complex\/page|complex\/rec\/song\/get|song\/list\/page), script-path=https://he2o.vercel.app/Resource/-Rewrite/anyehttp/wyy-s.js, timeout=60
 
-歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/v3\/song\/detail, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/wyy/wyy.js, timeout=60
+歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/x?eapi\/v3\/song\/detail, script-path=https://he2o.vercel.app/Resource/-Rewrite/anyehttp/wyy-s.js, timeout=60
 
-歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/song\/(?:chorus|enhance\/|play\/|type\/detail\/get), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/wyy/wyy.js, timeout=60
+歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/x?eapi\/song\/(?:chorus|enhance\/|play\/|type\/detail\/get), script-path=https://he2o.vercel.app/Resource/-Rewrite/anyehttp/wyy-s.js, timeout=60
 
-歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/(?:v1\/artist\/top\/song|v3\/discovery\/recommend\/songs), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/wyy/wyy.js, timeout=60
+歌曲、听书 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/x?eapi\/(?:v1\/artist\/top\/song|v3\/discovery\/recommend\/songs), script-path=https://he2o.vercel.app/Resource/-Rewrite/anyehttp/wyy-s.js, timeout=60
 
-等级 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/vipnewcenter\/app\/resource\/newaccountpage, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/wyy/wyy.js, timeout=60
+等级 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/x?eapi\/vipnewcenter\/app\/resource\/newaccountpage, script-path=https://he2o.vercel.app/Resource/-Rewrite/anyehttp/wyy-s.js, timeout=60
 
-首页歌单 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/w?e?api\/(homepage\/|v6\/)?playlist\/(?!(?:delete|subscribe|unsubscribe)), script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/wyy/wyy.js, timeout=60
+首页歌单 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/w?x?eapi\/(homepage\/|v6\/)?playlist\/(?!(?:delete|subscribe|unsubscribe)), script-path=https://he2o.vercel.app/Resource/-Rewrite/anyehttp/wyy-s.js, timeout=60
 
-音质 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/eapi\/vipauth\/app\/auth\/(soundquality\/)?query, script-path=https://raw.githubusercontent.com/xiaozei0707/QuantumultX/refs/heads/main/wyy/wyy.js, timeout=60
+音质 = type=http-request, pattern=^https?:\/\/interface\d?\.music\.163\.com\/x?eapi\/vipauth\/app\/auth\/(soundquality\/)?query, script-path=https://he2o.vercel.app/Resource/-Rewrite/anyehttp/wyy-s.js, timeout=60
 
 [MITM]
 hostname = %APPEND% interface*.music.163.com
